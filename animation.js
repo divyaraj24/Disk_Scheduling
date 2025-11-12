@@ -142,6 +142,32 @@ class DiskSchedulerVisualizer {
         }
         this.ctx.stroke();
 
+        // --- Show movement difference labels ---
+        this.ctx.fillStyle = '#111827';
+        this.ctx.font = '13px Inter';
+        this.ctx.textAlign = 'center';
+        for (let i = 1; i <= step; i++) {
+            const prevX = getX(i - 1, xPointsCount);
+            const prevY = getY(this.sequence[i - 1], this.maxCylinder);
+            const currX = getX(i, xPointsCount);
+            const currY = getY(this.sequence[i], this.maxCylinder);
+
+            const diff = Math.abs(this.sequence[i] - this.sequence[i - 1]);
+
+            // Position label at midpoint of line
+            const midX = (prevX + currX) / 2;
+            const midY = (prevY + currY) / 2 - 10;
+
+            this.ctx.fillStyle = 'rgba(81, 255, 0, 0.8)';
+            const text = `${diff}`;
+            const textWidth = this.ctx.measureText(text).width;
+            this.ctx.fillRect(midX - textWidth / 2 - 3, midY - 10, textWidth + 6, 16);
+
+            // Draw the text
+            this.ctx.fillStyle = '#111827';
+            this.ctx.fillText(text, midX, midY);
+        }
+
         // Points
         for (let i = 0; i < this.sequence.length; i++) {
             const x = getX(i, xPointsCount);
